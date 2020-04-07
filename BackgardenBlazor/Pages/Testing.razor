@@ -1,0 +1,49 @@
+﻿@page "/testing"
+
+
+    <div class="testing-container">
+        <div class="testing-line">
+            <div class="tl-header ti-pgio">
+                Gpio Pin
+            </div>
+            <div class="tl-header ti-descr">
+                Beschreibung
+            </div>
+            <div class="tl-header ti-action">
+                Aktionen
+            </div>
+        </div>
+        <div class="testing-line">
+            <div class="tl-item ti-pgio">
+                @GpioSettings.PowerPin
+            </div>
+            <div class="tl-item ti-descr">
+                Power einschalten
+            </div>
+            <div class="tl-item ti-action">
+                <MatSlideToggle Value="PowerEnabled" TValue="bool" ValueChanged="@(async (e) => await PowerToggled(e))"></MatSlideToggle>
+            </div>
+        </div>
+        <div class="testing-line">
+            <div class="tl-item ti-pgio">
+                @GpioSettings.ValvePin
+            </div>
+            <div class="tl-item ti-descr">
+                Ventil auf Pumpe schalten
+            </div>
+            <div class="tl-item ti-action">
+                <MatSlideToggle Value="ValveEnabled" TValue="bool" ValueChanged="@(async (e) => await ValveToggled(e))"></MatSlideToggle>
+            </div>
+        </div>
+        <div class="testing-line">
+            <div class="tl-item ti-pgio">
+                @GpioSettings.PumpPin
+            </div>
+            <div class="tl-item ti-descr">
+                Pumpe einschalten
+            </div>
+            <div class="tl-item ti-action">
+                <MatSlideToggle Value="PumpOn" TValue="bool" ValueChanged="@(async (e) => await PumpToggled(e))"></MatSlideToggle>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,5 @@
+﻿<div class="sprinkler-container">
+    <div class="spr-item spr-name">@Sprinkler.Description</div>
+    <div class="spr-item spr-pin">@Sprinkler.GpioPort</div>
+    <div class="spr-item spr-command"><MatSlideToggle Value="Enabled" TValue="bool" ValueChanged="@(async (e) => await ToggleChangedAsync(e))"></MatSlideToggle></div>
+</div>

@@ -1,0 +1,40 @@
+﻿.sprinklers-container {
+  display: flex;
+  flex-direction: column;
+  width: 800px; }
+
+.sprinkler-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  /*border: 1px solid lightgray;*/
+  border-radius: 3px;
+  margin: 5px;
+  box-shadow: 3px 3px 2px lightgray;
+  padding: 5px; }
+  .sprinkler-container .spr-item {
+    width: 33%; }
+
+.testing-container {
+  display: flex;
+  flex-direction: column;
+  width: 800px; }
+  .testing-container .testing-line {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    /*border: 1px solid lightgray;*/
+    border-radius: 3px;
+    margin: 5px;
+    box-shadow: 3px 3px 2px lightgray;
+    padding: 5px; }
+    .testing-container .testing-line .tl-header {
+      width: 33%; }
+    .testing-container .testing-line .tl-item {
+      width: 33%; }

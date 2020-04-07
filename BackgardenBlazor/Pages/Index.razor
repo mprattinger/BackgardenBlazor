@@ -1,0 +1,16 @@
+﻿@page "/"
+
+<h1>Backgarden</h1>
+
+<div>
+    <MatSlideToggle Value="Enabled" TValue="bool" ValueChanged="@(async (e) => await ToggleChangedAsync(e))"></MatSlideToggle>
+    <span>Auf Pumpe schalten</span>
+</div>
+
+
+<div class="sprinklers-container">
+    @foreach (var sm in Sprinklers)
+    {
+        <SprinklerComponent Sprinkler="@sm" />
+    }
+</div>
