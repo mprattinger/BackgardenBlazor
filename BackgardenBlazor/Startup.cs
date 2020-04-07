@@ -32,9 +32,10 @@ namespace BackgardenBlazor
 
             services.AddEntityFrameworkSqlite().AddDbContext<SprinklerContext>();
 
-            services.AddSingleton<GpioController>();
-
             services.AddSingleton<AppState>();
+            //services.AddSingleton<GpioService>(x => 
+            //    new GpioService(x.GetRequiredService<AppState>(), x.GetRequiredService<SprinklerContext>(), x.GetRequiredService<GpioSettingsConfiguration>())
+            //);
             services.AddSingleton<GpioService>();
 
             services.AddScoped<ISprinklerService, SprinklerService>();

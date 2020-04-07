@@ -24,16 +24,10 @@ namespace BackgardenBlazor.Pages
         protected override async Task OnInitializedAsync()
         {
             Sprinklers = await SprinklerService.LoadSprinklersAsync();
-            AppState.OnSprinklerStateChanged += AppState_OnSprinklerStateChanged;
+            AppState.OnGpioValueChanged += AppState_OnGpioValueChanged;
         }
 
-        public async Task ToggleChangedAsync(bool newValue)
-        {
-            Enabled = newValue;
-            await AppState.SprinklerStateChanged(new ToggleChangedModel { NewValue = newValue, ToggleType = ToggleType.PUMP });
-        }
-
-        private async Task AppState_OnSprinklerStateChanged(ToggleChangedModel data)
+        private async Task AppState_OnGpioValueChanged(ToggleChangedModel data)
         {
             await InvokeAsync(() =>
             {
@@ -45,9 +39,14 @@ namespace BackgardenBlazor.Pages
             });
         }
 
+        public async Task ToggleChangedAsync(bool newValue)
+        {
+            await AppState.ToggleGpio(new ToggleChangedModel { NewValue = newValue, ToggleType = ToggleType.PUMP });
+        }
+
         public void Dispose()
         {
-            AppState.OnSprinklerStateChanged -= AppState_OnSprinklerStateChanged;
+            AppState.OnGpioValueChanged -= AppState_OnGpioValueChanged;
         }
     }
 }
