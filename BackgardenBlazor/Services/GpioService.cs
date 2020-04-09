@@ -54,7 +54,7 @@ namespace BackgardenBlazor.Services
             //    Console.WriteLine($"Error setting up gpio controller: {ex.Message}");
             //}
 
-#if _WINDOWS
+#if IsWindows
 #else
             //    using (var controller = new GpioController())
             //{
@@ -71,7 +71,7 @@ namespace BackgardenBlazor.Services
         {
             await Task.Run(async () => {
                 Console.WriteLine($"Change Sprinkler {arg.SprinklerId}");
-#if _WINDOWS
+#if Windows
                 using (var controller = new GpioController(PinNumberingScheme.Logical, new GpioDriverMock()))
 #else
                 using (var controller = new GpioController())
@@ -80,31 +80,28 @@ namespace BackgardenBlazor.Services
                     switch (arg.ToggleType)
                     {
                         case ToggleType.SPRINKLER:
-#if _WINDOWS
-#else
+#if Linux
                             controller.OpenPin(arg.SprinklerId, PinMode.Output);
                             controller.Write(arg.SprinklerId, arg.NewValue ? PinValue.High : PinValue.Low);
 #endif
                             await _appState.GpioValueChanged(arg);
                             break;
                         case ToggleType.POWER:
-#if _WINDOWS
-#else
+#if Linux
                             controller.OpenPin(arg.SprinklerId, PinMode.Output);
                             controller.Write(arg.SprinklerId, arg.NewValue ? PinValue.High : PinValue.Low);
 #endif
                             await _appState.GpioValueChanged(arg);
                             break;
                         case ToggleType.PUMP:
-#if _WINDOWS
-#else
+#if Linux
                             controller.OpenPin(arg.SprinklerId, PinMode.Output);
                             controller.Write(arg.SprinklerId, arg.NewValue ? PinValue.High : PinValue.Low);
 #endif
                             await _appState.GpioValueChanged(arg);
                             break;
                         case ToggleType.VALVE:
-#if _WINDOWS
+#if Linux
 #else
                             controller.OpenPin(arg.SprinklerId, PinMode.Output);
                             controller.Write(arg.SprinklerId, arg.NewValue ? PinValue.High : PinValue.Low);

@@ -33,6 +33,16 @@ namespace BackgardenBlazor
                 .WriteTo.ColoredConsole()
                 .CreateLogger();
 
+#if Windows
+            Console.WriteLine("Windows");
+#endif
+#if Linux
+            Console.WriteLine("Linux");
+#endif
+#if OSX
+            Console.WriteLine("OSX");
+#endif
+
             try
             {
                 Log.Information("Building web host...");
