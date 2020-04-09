@@ -30,6 +30,12 @@ namespace BackgardenBlazor
             Configuration.Bind("GpioSettings", gpioSettings);
             services.AddSingleton(gpioSettings);
 
+#if Linux
+            services.AddSingleton<GpioController>();
+#else
+            services.AddSingleton<GpioController>(x => new GpioController(PinNumberingScheme.Logical, new GpioDriverMock()));
+#endif
+
             services.AddEntityFrameworkSqlite().AddDbContext<SprinklerContext>();
 
             services.AddSingleton<AppState>();

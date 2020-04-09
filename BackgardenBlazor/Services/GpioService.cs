@@ -14,21 +14,40 @@ namespace BackgardenBlazor.Services
         private readonly AppState _appState;
         //private readonly SprinklerContext _ctx;
         private readonly GpioSettingsConfiguration _gpioSettings;
-
+        private readonly GpioController _gpioController;
         private bool _setupDone = false;
 
-        public GpioService(AppState appState, GpioSettingsConfiguration gpioSettings)
+        public GpioService(AppState appState, GpioSettingsConfiguration gpioSettings, GpioController gpioController)
         {
-             _appState = appState;
+            _appState = appState;
             _appState.OnToggleGpio += _appState_OnToggleGpio;
 
             //_ctx = sprinklerContext;
             _gpioSettings = gpioSettings;
+            _gpioController = gpioController;
+
+            setupGpio();
         }
 
         public void Dispose()
         {
             _appState.OnToggleGpio -= _appState_OnToggleGpio;
+        }
+
+        private void setupGpio()
+        {
+            if (!_gpioController.IsPinOpen(_gpioSettings.PowerPin))
+            {
+                _gpioController.OpenPin(_gpioSettings.PowerPin, PinMode.Output);
+            }
+            if (!_gpioController.IsPinOpen(_gpioSettings.ValvePin))
+            {
+                _gpioController.OpenPin(_gpioSettings.ValvePin, PinMode.Output);
+            }
+            if (!_gpioController.IsPinOpen(_gpioSettings.PumpPin))
+            {
+                _gpioController.OpenPin(_gpioSettings.PumpPin, PinMode.Output);
+            }
         }
 
         public void SetupGpio()
@@ -69,48 +88,37 @@ namespace BackgardenBlazor.Services
 
         private async Task _appState_OnToggleGpio(ToggleChangedModel arg)
         {
-            await Task.Run(async () => {
+            await Task.Run(async () =>
+            {
                 Console.WriteLine($"Change Sprinkler {arg.SprinklerId}");
-#if Windows
-                using (var controller = new GpioController(PinNumberingScheme.Logical, new GpioDriverMock()))
-#else
-                using (var controller = new GpioController())
-#endif
+                switch (arg.ToggleType)
                 {
-                    switch (arg.ToggleType)
-                    {
-                        case ToggleType.SPRINKLER:
+                    case ToggleType.SPRINKLER:
 #if Linux
-                            controller.OpenPin(arg.SprinklerId, PinMode.Output);
-                            controller.Write(arg.SprinklerId, arg.NewValue ? PinValue.High : PinValue.Low);
+                        _gpioController.Write(arg.SprinklerId, arg.NewValue ? PinValue.High : PinValue.Low);
 #endif
-                            await _appState.GpioValueChanged(arg);
-                            break;
-                        case ToggleType.POWER:
-//#if Linux
-                            controller.OpenPin(_gpioSettings.PowerPin, PinMode.Output);
-                            controller.Write(_gpioSettings.PowerPin, arg.NewValue ? PinValue.High : PinValue.Low);
-//#endif
-                            await _appState.GpioValueChanged(arg);
-                            break;
-                        case ToggleType.PUMP:
-
+                        await _appState.GpioValueChanged(arg);
+                        break;
+                    case ToggleType.POWER:
+                        #if Linux
+                        _gpioController.Write(_gpioSettings.PowerPin, arg.NewValue ? PinValue.High : PinValue.Low);
+                        #endif
+                        await _appState.GpioValueChanged(arg);
+                        break;
+                    case ToggleType.PUMP:
 #if Linux
-                            controller.OpenPin(_gpioSettings.PumpPin, PinMode.Output);
-                            controller.Write(_gpioSettings.PumpPin, arg.NewValue ? PinValue.High : PinValue.Low);
+                            _gpioController.Write(_gpioSettings.PumpPin, arg.NewValue ? PinValue.High : PinValue.Low);
 #endif
-                            await _appState.GpioValueChanged(arg);
-                            break;
-                        case ToggleType.VALVE:
+                        await _appState.GpioValueChanged(arg);
+                        break;
+                    case ToggleType.VALVE:
 #if Linux
-                            controller.OpenPin(_gpioSettings.ValvePin, PinMode.Output);
-                            controller.Write(_gpioSettings.ValvePin, arg.NewValue ? PinValue.High : PinValue.Low);
+                            _gpioController.Write(_gpioSettings.ValvePin, arg.NewValue ? PinValue.High : PinValue.Low);
 #endif
-                            await _appState.GpioValueChanged(arg);
-                            break;
-                        default:
-                            break;
-                    }
+                        await _appState.GpioValueChanged(arg);
+                        break;
+                    default:
+                        break;
                 }
             });
         }
