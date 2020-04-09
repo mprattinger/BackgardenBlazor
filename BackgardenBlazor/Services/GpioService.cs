@@ -87,24 +87,24 @@ namespace BackgardenBlazor.Services
                             await _appState.GpioValueChanged(arg);
                             break;
                         case ToggleType.POWER:
-#if Linux
-                            controller.OpenPin(arg.SprinklerId, PinMode.Output);
-                            controller.Write(arg.SprinklerId, arg.NewValue ? PinValue.High : PinValue.Low);
-#endif
+//#if Linux
+                            controller.OpenPin(_gpioSettings.PowerPin, PinMode.Output);
+                            controller.Write(_gpioSettings.PowerPin, arg.NewValue ? PinValue.High : PinValue.Low);
+//#endif
                             await _appState.GpioValueChanged(arg);
                             break;
                         case ToggleType.PUMP:
+
 #if Linux
-                            controller.OpenPin(arg.SprinklerId, PinMode.Output);
-                            controller.Write(arg.SprinklerId, arg.NewValue ? PinValue.High : PinValue.Low);
+                            controller.OpenPin(_gpioSettings.PumpPin, PinMode.Output);
+                            controller.Write(_gpioSettings.PumpPin, arg.NewValue ? PinValue.High : PinValue.Low);
 #endif
                             await _appState.GpioValueChanged(arg);
                             break;
                         case ToggleType.VALVE:
 #if Linux
-#else
-                            controller.OpenPin(arg.SprinklerId, PinMode.Output);
-                            controller.Write(arg.SprinklerId, arg.NewValue ? PinValue.High : PinValue.Low);
+                            controller.OpenPin(_gpioSettings.ValvePin, PinMode.Output);
+                            controller.Write(_gpioSettings.ValvePin, arg.NewValue ? PinValue.High : PinValue.Low);
 #endif
                             await _appState.GpioValueChanged(arg);
                             break;
