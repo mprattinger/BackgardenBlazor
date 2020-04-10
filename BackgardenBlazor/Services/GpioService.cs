@@ -80,7 +80,7 @@ namespace BackgardenBlazor.Services
                 Console.WriteLine($"Change GpioPin {arg.GpioPin}");
 
 #if Linux
-                        _gpioController.Write(_gpioSettings.GpioPin, arg.NewValue ? PinValue.High : PinValue.Low);
+                        _gpioController.Write(arg.GpioPin, arg.NewValue ? PinValue.High : PinValue.Low);
 #endif
                 await _appState.GpioValueChangedAsync(arg);
 
