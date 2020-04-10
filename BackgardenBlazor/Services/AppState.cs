@@ -7,7 +7,7 @@ namespace BackgardenBlazor.Services
     public class AppState
     {
         public event Action<ToggleChangedModel> OnToggleGpio;
-        public event Func<ToggleChangedModel, Task> OnToggleGpioAsnc;
+        public event Func<ToggleChangedModel, Task> OnToggleGpioAsync;
 
         public event Action<ToggleChangedModel> OnGpioValueChanged;
         public event Func<ToggleChangedModel, Task> OnGpioValueChangedAsync;
@@ -22,9 +22,9 @@ namespace BackgardenBlazor.Services
 
         public async Task ToggleGpioAsync(ToggleChangedModel data)
         {
-            if (OnToggleGpioAsnc != null)
+            if (OnToggleGpioAsync != null)
             {
-                await OnToggleGpioAsnc.Invoke(data);
+                await OnToggleGpioAsync.Invoke(data);
             }
         }
 

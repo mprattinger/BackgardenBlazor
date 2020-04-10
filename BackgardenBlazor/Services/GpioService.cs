@@ -1,4 +1,5 @@
 ﻿using BackgardenBlazor.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Device.Gpio;
 using System.Threading.Tasks;
@@ -12,15 +13,17 @@ namespace BackgardenBlazor.Services
         //private readonly SprinklerContext _ctx;
         private readonly GpioSettingsConfiguration _gpioSettings;
         private readonly GpioController _gpioController;
+        private readonly ILogger<GpioService> _logger;
 
-        public GpioService(AppState appState, GpioSettingsConfiguration gpioSettings, GpioController gpioController)
+        public GpioService(ILogger<GpioService> logger, AppState appState, GpioSettingsConfiguration gpioSettings, GpioController gpioController)
         {
             _appState = appState;
-            _appState.OnToggleGpioAsnc += appState_OnToggleGpio;
+            _appState.OnToggleGpioAsync += appState_OnToggleGpioAsync;
 
             //_ctx = sprinklerContext;
             _gpioSettings = gpioSettings;
             _gpioController = gpioController;
+            _logger = logger;
 
             setupGpio();
 
@@ -30,13 +33,14 @@ namespace BackgardenBlazor.Services
 
         public void Dispose()
         {
-            _appState.OnToggleGpioAsnc -= appState_OnToggleGpio;
+            _appState.OnToggleGpioAsync -= appState_OnToggleGpioAsync;
             _gpioController.UnregisterCallbackForPinValueChangedEvent(_gpioSettings.WaterLevelPin, waterLevelOn);
             _gpioController.UnregisterCallbackForPinValueChangedEvent(_gpioSettings.WaterLevelPin, waterLevelOff);
         }
 
         private void setupGpio()
         {
+            _logger.LogDebug($"Setting-Up Gpio's...");
             if (!_gpioController.IsPinOpen(_gpioSettings.PowerPin))
             {
                 _gpioController.OpenPin(_gpioSettings.PowerPin, PinMode.Output);
@@ -54,10 +58,12 @@ namespace BackgardenBlazor.Services
                 _gpioController.OpenPin(_gpioSettings.WaterLevelPin, PinMode.Input);
                 var val = _gpioController.Read(_gpioSettings.WaterLevelPin);
                 _appState.GpioValueChanged(
-                    new ToggleChangedModel { 
-                        GpioPin = _gpioSettings.WaterLevelPin, 
-                        ToggleType = ToggleType.WATERLEVEL, 
-                        NewValue = val == PinValue.High ? true : false });
+                    new ToggleChangedModel
+                    {
+                        GpioPin = _gpioSettings.WaterLevelPin,
+                        ToggleType = ToggleType.WATERLEVEL,
+                        NewValue = val == PinValue.High ? true : false
+                    });
             }
             if (!_gpioController.IsPinOpen(_gpioSettings.WerferPin))
             {
@@ -71,48 +77,19 @@ namespace BackgardenBlazor.Services
             {
                 _gpioController.OpenPin(_gpioSettings.TropferPin, PinMode.Output);
             }
+            _logger.LogDebug($"Gpio setup finished!");
         }
 
-        private async Task appState_OnToggleGpio(ToggleChangedModel arg)
+        private async Task appState_OnToggleGpioAsync(ToggleChangedModel arg)
         {
             await Task.Run(async () =>
             {
-                Console.WriteLine($"Change GpioPin {arg.GpioPin}");
+                _logger.LogDebug($"Change GpioPin {arg.GpioPin}");
 
 #if Linux
                         _gpioController.Write(arg.GpioPin, arg.NewValue ? PinValue.High : PinValue.Low);
 #endif
                 await _appState.GpioValueChangedAsync(arg);
-
-                //                switch (arg.ToggleType)
-                //                {
-                //                    case ToggleType.WERFER:
-                //#if Linux
-                //                        _gpioController.Write(arg.SprinklerId, arg.NewValue ? PinValue.High : PinValue.Low);
-                //#endif
-                //                        await _appState.GpioValueChangedAsync(arg);
-                //                        break;
-                //                    case ToggleType.POWER:
-                //#if Linux
-                //                        _gpioController.Write(_gpioSettings.PowerPin, arg.NewValue ? PinValue.High : PinValue.Low);
-                //#endif
-                //                        await _appState.GpioValueChangedAsync(arg);
-                //                        break;
-                //                    case ToggleType.PUMP:
-                //#if Linux
-                //                            _gpioController.Write(_gpioSettings.PumpPin, arg.NewValue ? PinValue.High : PinValue.Low);
-                //#endif
-                //                        await _appState.GpioValueChangedAsync(arg);
-                //                        break;
-                //                    case ToggleType.VALVE:
-                //#if Linux
-                //                            _gpioController.Write(_gpioSettings.ValvePin, arg.NewValue ? PinValue.High : PinValue.Low);
-                //#endif
-                //                        await _appState.GpioValueChangedAsync(arg);
-                //                        break;
-                //                    default:
-                //                        break;
-                //                }
             });
         }
 
