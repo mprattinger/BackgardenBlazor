@@ -43,9 +43,16 @@ namespace BackgardenBlazor.Services
 
         public void Dispose()
         {
-            _appState.OnToggleGpioAsync -= appState_OnToggleGpioAsync;
-            _gpioController.UnregisterCallbackForPinValueChangedEvent(_gpioSettings.WaterLevelPin, waterLevelOn);
-            _gpioController.UnregisterCallbackForPinValueChangedEvent(_gpioSettings.WaterLevelPin, waterLevelOff);
+            try
+            {
+                _appState.OnToggleGpioAsync -= appState_OnToggleGpioAsync;
+                _gpioController.UnregisterCallbackForPinValueChangedEvent(_gpioSettings.WaterLevelPin, waterLevelOn);
+                _gpioController.UnregisterCallbackForPinValueChangedEvent(_gpioSettings.WaterLevelPin, waterLevelOff);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when disposing events: {ex.Message}");
+            }
         }
 
         public void SetupGpio()
