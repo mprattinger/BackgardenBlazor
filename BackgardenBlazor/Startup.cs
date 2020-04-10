@@ -60,6 +60,8 @@ namespace BackgardenBlazor
                 app.UseHsts();
             }
 
+            System.Console.WriteLine(env.EnvironmentName);
+
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
