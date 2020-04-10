@@ -27,8 +27,18 @@ namespace BackgardenBlazor.Services
 
             SetupGpio();
 
-            _gpioController.RegisterCallbackForPinValueChangedEvent(_gpioSettings.WaterLevelPin, PinEventTypes.Rising, waterLevelOn);
-            _gpioController.RegisterCallbackForPinValueChangedEvent(_gpioSettings.WaterLevelPin, PinEventTypes.Falling, waterLevelOff);
+            _logger.LogDebug($"Register Waterlevel callbacks...");
+            try
+            {
+                System.Threading.Thread.Sleep(1000);
+                _gpioController.RegisterCallbackForPinValueChangedEvent(_gpioSettings.WaterLevelPin, PinEventTypes.Rising, waterLevelOn);
+                _gpioController.RegisterCallbackForPinValueChangedEvent(_gpioSettings.WaterLevelPin, PinEventTypes.Falling, waterLevelOff);
+                _logger.LogDebug($"Waterlevel callbacks registered!");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error when registering waterlevel callback events: {ex.Message}!");
+            }
         }
 
         public void Dispose()
