@@ -55,8 +55,14 @@ namespace BackgardenBlazor.Services
             }
             if (!_gpioController.IsPinOpen(_gpioSettings.WaterLevelPin))
             {
-                _gpioController.OpenPin(_gpioSettings.WaterLevelPin, PinMode.Input);
+                _logger.LogDebug($"Opening Waterlevel pin {_gpioSettings.WaterLevelPin}...");
+                _gpioController.OpenPin(_gpioSettings.WaterLevelPin);
+                _logger.LogDebug("Waterlevel pin is open! Set mode to input...");
+                _gpioController.SetPinMode(_gpioSettings.WaterLevelPin, PinMode.InputPullDown);
+                _logger.LogDebug("Waterlevel pin mode is input! Reading value...");
+                //_gpioController.OpenPin(_gpioSettings.WaterLevelPin, PinMode.InputPullDown);
                 var val = _gpioController.Read(_gpioSettings.WaterLevelPin);
+                _logger.LogDebug($"Waterlevel value is {val}!");
                 _appState.GpioValueChanged(
                     new ToggleChangedModel
                     {

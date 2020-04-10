@@ -72,7 +72,7 @@
                 Werfer einschalten
             </div>
             <div class="tl-item ti-action">
-                <MatSlideToggle Value="PowerEnabled" TValue="bool" ValueChanged="@(async (e) => await WerferToggled(e))"></MatSlideToggle>
+                <MatSlideToggle Value="WerferEnabled" TValue="bool" ValueChanged="@(async (e) => await WerferToggled(e))"></MatSlideToggle>
             </div>
         </div>
         <div class="testing-line">
@@ -83,7 +83,7 @@
                 Spüher einschalten
             </div>
             <div class="tl-item ti-action">
-                <MatSlideToggle Value="ValveEnabled" TValue="bool" ValueChanged="@(async (e) => await SprueherToggled(e))"></MatSlideToggle>
+                <MatSlideToggle Value="SprueherEnabled" TValue="bool" ValueChanged="@(async (e) => await SprueherToggled(e))"></MatSlideToggle>
             </div>
         </div>
         <div class="testing-line">
@@ -94,7 +94,7 @@
                 Tropfer einschalten
             </div>
             <div class="tl-item ti-action">
-                <MatSlideToggle Value="PumpOn" TValue="bool" ValueChanged="@(async (e) => await TropferToggled(e))"></MatSlideToggle>
+                <MatSlideToggle Value="TropferEnabled" TValue="bool" ValueChanged="@(async (e) => await TropferToggled(e))"></MatSlideToggle>
             </div>
         </div>
     </div>
