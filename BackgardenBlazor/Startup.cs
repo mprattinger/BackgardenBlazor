@@ -61,7 +61,7 @@ namespace BackgardenBlazor
             }
 
             System.Console.WriteLine(env.EnvironmentName);
-            gpioService.SetupGpio();
+            //gpioService.SetupGpio();
 
             //app.UseHttpsRedirection();
             app.UseStaticFiles();

@@ -25,7 +25,7 @@ namespace BackgardenBlazor.Services
             _gpioController = gpioController;
             _logger = logger;
 
-            //setupGpio();
+            SetupGpio();
 
             _gpioController.RegisterCallbackForPinValueChangedEvent(_gpioSettings.WaterLevelPin, PinEventTypes.Rising, waterLevelOn);
             _gpioController.RegisterCallbackForPinValueChangedEvent(_gpioSettings.WaterLevelPin, PinEventTypes.Falling, waterLevelOff);
