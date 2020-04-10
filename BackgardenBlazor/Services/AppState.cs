@@ -1,29 +1,46 @@
 ﻿using BackgardenBlazor.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BackgardenBlazor.Services
 {
     public class AppState
     {
-        public event Func<ToggleChangedModel, Task> OnToggleGpio;
-        public event Func<ToggleChangedModel, Task> OnGpioValueChanged;
+        public event Action<ToggleChangedModel> OnToggleGpio;
+        public event Func<ToggleChangedModel, Task> OnToggleGpioAsnc;
 
-        public async Task ToggleGpio(ToggleChangedModel data)
+        public event Action<ToggleChangedModel> OnGpioValueChanged;
+        public event Func<ToggleChangedModel, Task> OnGpioValueChangedAsync;
+       
+        public void ToggleGpio(ToggleChangedModel data)
         {
-            if(OnToggleGpio != null)
+            if (OnToggleGpio != null)
             {
-                await OnToggleGpio.Invoke(data);
+                OnToggleGpio.Invoke(data);
             }
         }
 
-        public async Task GpioValueChanged(ToggleChangedModel data)
+        public async Task ToggleGpioAsync(ToggleChangedModel data)
+        {
+            if (OnToggleGpioAsnc != null)
+            {
+                await OnToggleGpioAsnc.Invoke(data);
+            }
+        }
+
+        public void GpioValueChanged(ToggleChangedModel data)
         {
             if (OnGpioValueChanged != null)
             {
-                await OnGpioValueChanged.Invoke(data);
+                OnGpioValueChanged.Invoke(data);
+            }
+        }
+
+        public async Task GpioValueChangedAsync(ToggleChangedModel data)
+        {
+            if (OnGpioValueChangedAsync != null)
+            {
+                await OnGpioValueChangedAsync.Invoke(data);
             }
         }
     }

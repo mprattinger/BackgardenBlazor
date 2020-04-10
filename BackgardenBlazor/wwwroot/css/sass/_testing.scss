@@ -1,8 +1,33 @@
 ﻿
+.testing-waterlevel {
+    display: flex;
+    height: 150px;
+    width: 150px;
+    justify-content: center;
+
+    .tw-status {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+    }
+
+    .tw-ok {
+        background-color: green;
+    }
+
+    .tw-nok {
+        background-color: red;
+        color: white;
+    }
+}
+
 .testing-container {
     display: flex;
     flex-direction: column;
     width: 800px;
+    margin-top: 50px;
 
     .testing-line {
         display: flex;
@@ -19,6 +44,8 @@
 
         .tl-header {
             width: 33%;
+            font-weight: bold;
+            font-size: 1.2em;
         }
 
         .tl-item {

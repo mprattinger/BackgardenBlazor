@@ -12,28 +12,30 @@ namespace BackgardenBlazor.Pages
     public partial class Index : IDisposable
     {
         [Inject]
-        public ISprinklerService SprinklerService { get; set; }
-
-        [Inject]
         public AppState AppState { get; set; }
 
-        public bool Enabled { get; set; }
+        [Inject]
+        public GpioSettingsConfiguration GpioSettings { get; set; }
 
-        public List<SprinklerModel> Sprinklers { get; set; } = new List<SprinklerModel>();
+        public bool PumpEnabled { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        public List<ToggleChangedModel> Sprinklers { get; set; } = new List<ToggleChangedModel>();
+
+        protected override void OnInitialized()
         {
-            Sprinklers = await SprinklerService.LoadSprinklersAsync();
-            AppState.OnGpioValueChanged += AppState_OnGpioValueChanged;
+            Sprinklers.Add(new ToggleChangedModel { GpioPin = GpioSettings.WerferPin, ToggleType = ToggleType.WERFER });
+            Sprinklers.Add(new ToggleChangedModel { GpioPin = GpioSettings.SprueherPin, ToggleType = ToggleType.SPRUEHER });
+            Sprinklers.Add(new ToggleChangedModel { GpioPin = GpioSettings.TropferPin, ToggleType = ToggleType.TROPFER });
+            AppState.OnGpioValueChangedAsync += appState_OnGpioValueChanged;
         }
 
-        private async Task AppState_OnGpioValueChanged(ToggleChangedModel data)
+        private async Task appState_OnGpioValueChanged(ToggleChangedModel data)
         {
             await InvokeAsync(() =>
             {
                 if (data.ToggleType == ToggleType.PUMP)
                 {
-                    Enabled = data.NewValue;
+                    PumpEnabled = data.NewValue;
                     StateHasChanged();
                 }
             });
@@ -41,12 +43,12 @@ namespace BackgardenBlazor.Pages
 
         public async Task ToggleChangedAsync(bool newValue)
         {
-            await AppState.ToggleGpio(new ToggleChangedModel { NewValue = newValue, ToggleType = ToggleType.PUMP });
+            await AppState.ToggleGpioAsync(new ToggleChangedModel { NewValue = newValue, ToggleType = ToggleType.PUMP });
         }
 
         public void Dispose()
         {
-            AppState.OnGpioValueChanged -= AppState_OnGpioValueChanged;
+            AppState.OnGpioValueChangedAsync -= appState_OnGpioValueChanged;
         }
     }
 }

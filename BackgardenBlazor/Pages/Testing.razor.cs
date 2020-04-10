@@ -21,18 +21,42 @@ namespace BackgardenBlazor.Pages
 
         public bool PumpOn { get; set; }
 
+        public bool WaterLevelOk { get; set; } = false;
+
+        public bool WerferEnabled { get; set; }
+
+        public bool SprueherEnabled { get; set; }
+
+        public bool TropferEnabled { get; set; }
+
         protected override void OnInitialized()
         {
-            AppState.OnGpioValueChanged += AppState_OnGpioValueChanged;
+            AppState.OnGpioValueChangedAsync += appState_OnGpioValueChangedAsync;
+            AppState.OnGpioValueChanged += appState_OnGpioValueChanged;
         }
 
-        private async Task AppState_OnGpioValueChanged(ToggleChangedModel arg)
+        private void appState_OnGpioValueChanged(ToggleChangedModel obj)
+        {
+            if(obj.ToggleType == ToggleType.WATERLEVEL)
+            {
+                WaterLevelOk = obj.NewValue;
+            }
+        }
+
+        private async Task appState_OnGpioValueChangedAsync(ToggleChangedModel arg)
         {
             await InvokeAsync(() =>
             {
                 switch (arg.ToggleType)
                 {
-                    case ToggleType.SPRINKLER:
+                    case ToggleType.WERFER:
+                        WerferEnabled = arg.NewValue;
+                        break;
+                    case ToggleType.SPRUEHER:
+                        SprueherEnabled = arg.NewValue;
+                        break;
+                    case ToggleType.TROPFER:
+                        TropferEnabled = arg.NewValue;
                         break;
                     case ToggleType.POWER:
                         PowerEnabled = arg.NewValue;
@@ -51,22 +75,38 @@ namespace BackgardenBlazor.Pages
 
         public async Task PowerToggled(bool newValue)
         {
-            await AppState.ToggleGpio(new ToggleChangedModel { SprinklerId = GpioSettings.PowerPin, NewValue = newValue, ToggleType = ToggleType.POWER });
+            await AppState.ToggleGpioAsync(new ToggleChangedModel { GpioPin = GpioSettings.PowerPin, NewValue = newValue, ToggleType = ToggleType.POWER });
         }
 
         public async Task ValveToggled(bool newValue)
         {
-            await AppState.ToggleGpio(new ToggleChangedModel { SprinklerId = GpioSettings.ValvePin, NewValue = newValue, ToggleType = ToggleType.VALVE });
+            await AppState.ToggleGpioAsync(new ToggleChangedModel { GpioPin = GpioSettings.ValvePin, NewValue = newValue, ToggleType = ToggleType.VALVE });
+        }
+
+        public async Task WerferToggled(bool newValue)
+        {
+            await AppState.ToggleGpioAsync(new ToggleChangedModel { GpioPin = GpioSettings.PumpPin, NewValue = newValue, ToggleType = ToggleType.PUMP });
+        }
+
+        public async Task SprueherToggled(bool newValue)
+        {
+            await AppState.ToggleGpioAsync(new ToggleChangedModel { GpioPin = GpioSettings.WerferPin, NewValue = newValue, ToggleType = ToggleType.WERFER });
+        }
+
+        public async Task TropferToggled(bool newValue)
+        {
+            await AppState.ToggleGpioAsync(new ToggleChangedModel { GpioPin = GpioSettings.SprueherPin, NewValue = newValue, ToggleType = ToggleType.SPRUEHER });
         }
 
         public async Task PumpToggled(bool newValue)
         {
-            await AppState.ToggleGpio(new ToggleChangedModel { SprinklerId = GpioSettings.PumpPin, NewValue = newValue, ToggleType = ToggleType.PUMP });
+            await AppState.ToggleGpioAsync(new ToggleChangedModel { GpioPin = GpioSettings.TropferPin, NewValue = newValue, ToggleType = ToggleType.TROPFER });
         }
 
         public void Dispose()
         {
-            AppState.OnGpioValueChanged -= AppState_OnGpioValueChanged;
+            AppState.OnGpioValueChangedAsync -= appState_OnGpioValueChangedAsync;
+            AppState.OnGpioValueChanged -= appState_OnGpioValueChanged;
         }
     }
 }

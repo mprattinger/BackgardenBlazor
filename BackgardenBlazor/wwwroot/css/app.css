@@ -18,10 +18,28 @@
   .sprinkler-container .spr-item {
     width: 33%; }
 
+.testing-waterlevel {
+  display: flex;
+  height: 150px;
+  width: 150px;
+  justify-content: center; }
+  .testing-waterlevel .tw-status {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold; }
+  .testing-waterlevel .tw-ok {
+    background-color: green; }
+  .testing-waterlevel .tw-nok {
+    background-color: red;
+    color: white; }
+
 .testing-container {
   display: flex;
   flex-direction: column;
-  width: 800px; }
+  width: 800px;
+  margin-top: 50px; }
   .testing-container .testing-line {
     display: flex;
     flex-direction: row;
@@ -35,6 +53,8 @@
     box-shadow: 3px 3px 2px lightgray;
     padding: 5px; }
     .testing-container .testing-line .tl-header {
-      width: 33%; }
+      width: 33%;
+      font-weight: bold;
+      font-size: 1.2em; }
     .testing-container .testing-line .tl-item {
       width: 33%; }

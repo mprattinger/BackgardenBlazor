@@ -1,5 +1,4 @@
-﻿using BackgardenBlazor.Data;
-using BackgardenBlazor.Models;
+﻿using BackgardenBlazor.Models;
 using BackgardenBlazor.Services;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -13,24 +12,53 @@ namespace BackgardenBlazor.Components
         [Inject]
         public AppState AppState { get; set; }
 
-        [Inject]
-        public SprinklerContext Context { get; set; }
-
         [Parameter]
-        public SprinklerModel Sprinkler { get; set; }
+        public ToggleChangedModel Sprinkler { get; set; }
+
+        public string Description { get; set; } = string.Empty;
 
         public bool Enabled { get; set; }
 
         protected override void OnInitialized()
         {
-            AppState.OnGpioValueChanged += AppState_OnGpioValueChanged; 
+            AppState.OnGpioValueChangedAsync += appState_OnGpioValueChanged;
+
+            switch (Sprinkler.ToggleType)
+            {
+                case ToggleType.WERFER:
+                    Description = "Werfer";
+                    break;
+                case ToggleType.SPRUEHER:
+                    Description = "Sprüher";
+                    break;
+                case ToggleType.TROPFER:
+                    Description = "Tropfer";
+                    break;
+                case ToggleType.POWER:
+                    Description = "Einschalten";
+                    break;
+                case ToggleType.PUMP:
+                    Description = "Pumpe";
+                    break;
+                case ToggleType.VALVE:
+                    Description = "Ventil";
+                    break;
+                case ToggleType.WATERLEVEL:
+                    Description = "Wasser Level";
+                    break;
+                case ToggleType.UNKNOWN:
+                    Description = "Unbekannt";
+                    break;
+                default:
+                    break;
+            }
         }
 
-        private async Task AppState_OnGpioValueChanged(ToggleChangedModel data)
+        private async Task appState_OnGpioValueChanged(ToggleChangedModel data)
         {
             await InvokeAsync(() =>
             {
-                if (data.SprinklerId == Sprinkler.Id)
+                if (data.GpioPin == Sprinkler.GpioPin)
                 {
                     Enabled = data.NewValue;
                     StateHasChanged();
@@ -40,13 +68,14 @@ namespace BackgardenBlazor.Components
 
         public async Task ToggleChangedAsync(bool newValue)
         {
-            await AppState.ToggleGpio(new ToggleChangedModel { SprinklerId = Sprinkler.Id, NewValue = newValue, ToggleType = ToggleType.SPRINKLER });
+            Sprinkler.NewValue = newValue;
+            await AppState.ToggleGpioAsync(Sprinkler);
         }
 
         
         public void Dispose()
         {
-            AppState.OnGpioValueChanged += AppState_OnGpioValueChanged;
+            AppState.OnGpioValueChangedAsync += appState_OnGpioValueChanged;
         }
     }
 }

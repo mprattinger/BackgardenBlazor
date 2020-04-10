@@ -7,17 +7,21 @@ namespace BackgardenBlazor.Models
 {
     public enum ToggleType
     {
-        SPRINKLER,
+        WERFER,
+        SPRUEHER,
+        TROPFER,
         POWER,
         PUMP,
-        VALVE
+        VALVE,
+        WATERLEVEL,
+        UNKNOWN
     }
 
     public class ToggleChangedModel
     {
-        public ToggleType ToggleType { get; set; } = ToggleType.SPRINKLER;
+        public ToggleType ToggleType { get; set; } = ToggleType.UNKNOWN;
 
-        public int SprinklerId { get; set; }
+        public int GpioPin { get; set; }
 
         public bool NewValue { get; set; }
     }

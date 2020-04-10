@@ -1,4 +1,3 @@
-using BackgardenBlazor.Data;
 using BackgardenBlazor.Models;
 using BackgardenBlazor.Services;
 using Microsoft.AspNetCore.Builder;
@@ -36,7 +35,7 @@ namespace BackgardenBlazor
             services.AddSingleton<GpioController>(x => new GpioController(PinNumberingScheme.Logical, new GpioDriverMock()));
 #endif
 
-            services.AddEntityFrameworkSqlite().AddDbContext<SprinklerContext>();
+            //services.AddEntityFrameworkSqlite().AddDbContext<SprinklerContext>();
 
             services.AddSingleton<AppState>();
             //services.AddSingleton<GpioService>(x => 
@@ -44,11 +43,11 @@ namespace BackgardenBlazor
             //);
             services.AddSingleton<GpioService>();
 
-            services.AddScoped<ISprinklerService, SprinklerService>();
+            //services.AddScoped<ISprinklerService, SprinklerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, SprinklerContext context)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -65,11 +64,6 @@ namespace BackgardenBlazor
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            context.Database.EnsureCreated();
-
-            var gpio = app.ApplicationServices.GetService<GpioService>();
-            gpio.SetupGpio();
 
             app.UseEndpoints(endpoints =>
             {
