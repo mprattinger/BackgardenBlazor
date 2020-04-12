@@ -58,7 +58,7 @@ namespace BackgardenBlazor.Components
         {
             await InvokeAsync(() =>
             {
-                if (data.GpioPin == Sprinkler.GpioPin)
+                if (data.ToggleType == Sprinkler.ToggleType)
                 {
                     Enabled = data.NewValue;
                     StateHasChanged();
@@ -75,7 +75,7 @@ namespace BackgardenBlazor.Components
         
         public void Dispose()
         {
-            AppState.OnGpioValueChangedAsync += appState_OnGpioValueChanged;
+            AppState.OnGpioValueChangedAsync -= appState_OnGpioValueChanged;
         }
     }
 }

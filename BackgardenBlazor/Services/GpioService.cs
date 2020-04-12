@@ -65,13 +65,15 @@ namespace BackgardenBlazor.Services
                 //_gpioController.OpenPin(_gpioSettings.WaterLevelPin, PinMode.InputPullDown);
                 var val = _gpioController.Read(_gpioSettings.WaterLevelPin);
                 _logger.LogDebug($"Waterlevel value is {val}!");
-                _appState.GpioValueChanged(
+                Task.Run(async () =>
+                {
+                    await _appState.GpioValueChangedAsync(
                     new ToggleChangedModel
                     {
-                        GpioPin = _gpioSettings.WaterLevelPin,
                         ToggleType = ToggleType.WATERLEVEL,
                         NewValue = val == PinValue.High ? true : false
                     });
+                });
             }
             if (!_gpioController.IsPinOpen(_gpioSettings.WerferPin))
             {
@@ -92,13 +94,39 @@ namespace BackgardenBlazor.Services
         {
             await Task.Run(async () =>
             {
-                _logger.LogDebug($"Change GpioPin {arg.GpioPin}");
+                var pin = getGpioPin(arg.ToggleType);
+                _logger.LogDebug($"Change {arg.ToggleType} to {arg.NewValue} on pin {pin}...");
 
 #if Linux
-                        _gpioController.Write(arg.GpioPin, arg.NewValue ? PinValue.High : PinValue.Low);
+                        _gpioController.Write(pin, arg.NewValue ? PinValue.High : PinValue.Low);
 #endif
                 await _appState.GpioValueChangedAsync(arg);
             });
+        }
+
+        private int getGpioPin(ToggleType toggleType)
+        {
+            switch (toggleType)
+            {
+                case ToggleType.WERFER:
+                    return _gpioSettings.WerferPin;
+                case ToggleType.SPRUEHER:
+                    return _gpioSettings.SprueherPin;
+                case ToggleType.TROPFER:
+                    return _gpioSettings.TropferPin;
+                case ToggleType.POWER:
+                    return _gpioSettings.PowerPin;
+                case ToggleType.PUMP:
+                    return _gpioSettings.PumpPin;
+                case ToggleType.VALVE:
+                    return _gpioSettings.ValvePin;
+                case ToggleType.WATERLEVEL:
+                    return _gpioSettings.WaterLevelPin;
+                case ToggleType.UNKNOWN:
+                    return -1;
+                default:
+                    return -1;
+            }
         }
     }
 }
