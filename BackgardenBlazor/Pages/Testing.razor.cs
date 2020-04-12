@@ -2,6 +2,7 @@
 using BackgardenBlazor.Services;
 using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BackgardenBlazor.Pages
@@ -29,9 +30,14 @@ namespace BackgardenBlazor.Pages
 
         public bool TropferEnabled { get; set; }
 
+        public List<ToggleChangedModel> Sprinklers { get; set; } = new List<ToggleChangedModel>();
+
         protected override void OnInitialized()
         {
             AppState.OnGpioValueChangedAsync += appState_OnGpioValueChangedAsync;
+            Sprinklers.Add(new ToggleChangedModel { ToggleType = ToggleType.WERFER });
+            Sprinklers.Add(new ToggleChangedModel { ToggleType = ToggleType.SPRUEHER });
+            Sprinklers.Add(new ToggleChangedModel { ToggleType = ToggleType.TROPFER });
         }
 
         private async Task appState_OnGpioValueChangedAsync(ToggleChangedModel arg)

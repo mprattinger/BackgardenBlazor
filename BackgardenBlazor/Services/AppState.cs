@@ -11,7 +11,9 @@ namespace BackgardenBlazor.Services
 
         public event Action<ToggleChangedModel> OnGpioValueChanged;
         public event Func<ToggleChangedModel, Task> OnGpioValueChangedAsync;
-       
+
+        public event Func<ToggleType, string, Task> OnSprinklerMessage;
+
         public void ToggleGpio(ToggleChangedModel data)
         {
             if (OnToggleGpio != null)
@@ -41,6 +43,14 @@ namespace BackgardenBlazor.Services
             if (OnGpioValueChangedAsync != null)
             {
                 await OnGpioValueChangedAsync.Invoke(data);
+            }
+        }
+
+        public async Task SprinklerMessageAsync(ToggleType toggleType, string message)
+        {
+            if(OnSprinklerMessage != null)
+            {
+                await OnSprinklerMessage.Invoke(toggleType, message);
             }
         }
     }
