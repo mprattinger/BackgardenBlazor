@@ -25,7 +25,7 @@ namespace BackgardenBlazor.Services
             _gpioController = gpioController;
             _logger = logger;
 
-            SetupGpio();
+            setupGpio();
         }
 
         public void Dispose()
@@ -40,7 +40,7 @@ namespace BackgardenBlazor.Services
             }
         }
 
-        public void SetupGpio()
+        private void setupGpio()
         {
             _logger.LogDebug($"Setting-Up Gpio's...");
             if (!_gpioController.IsPinOpen(_gpioSettings.PowerPin))
@@ -94,7 +94,7 @@ namespace BackgardenBlazor.Services
         {
             await Task.Run(async () =>
             {
-                var pin = getGpioPin(arg.ToggleType);
+                var pin = getGpioPin(_gpioSettings, arg.ToggleType);
                 _logger.LogDebug($"Change {arg.ToggleType} to {arg.NewValue} on pin {pin}...");
 
 #if Linux
@@ -104,24 +104,24 @@ namespace BackgardenBlazor.Services
             });
         }
 
-        private int getGpioPin(ToggleType toggleType)
+        public static int getGpioPin(GpioSettingsConfiguration config, ToggleType toggleType)
         {
             switch (toggleType)
             {
                 case ToggleType.WERFER:
-                    return _gpioSettings.WerferPin;
+                    return config.WerferPin;
                 case ToggleType.SPRUEHER:
-                    return _gpioSettings.SprueherPin;
+                    return config.SprueherPin;
                 case ToggleType.TROPFER:
-                    return _gpioSettings.TropferPin;
+                    return config.TropferPin;
                 case ToggleType.POWER:
-                    return _gpioSettings.PowerPin;
+                    return config.PowerPin;
                 case ToggleType.PUMP:
-                    return _gpioSettings.PumpPin;
+                    return config.PumpPin;
                 case ToggleType.VALVE:
-                    return _gpioSettings.ValvePin;
+                    return config.ValvePin;
                 case ToggleType.WATERLEVEL:
-                    return _gpioSettings.WaterLevelPin;
+                    return config.WaterLevelPin;
                 case ToggleType.UNKNOWN:
                     return -1;
                 default:

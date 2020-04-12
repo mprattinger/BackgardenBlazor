@@ -43,6 +43,7 @@ namespace BackgardenBlazor
             //);
             services.AddSingleton<GpioService>();
             services.AddHostedService<BackgroundWaterlevelService>();
+            services.AddSingleton<SprinklerService>();
             //services.AddScoped<ISprinklerService, SprinklerService>();
         }
 

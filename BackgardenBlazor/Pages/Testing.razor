@@ -1,100 +1,111 @@
 ﻿@page "/testing"
-    
-    <div class="testing-waterlevel">
-        <div class="tw-status @(WaterLevelOk ? "tw-ok" : "tw-nok")">
-            Wasser Level
-        </div>
-    </div>
 
-    <div class="testing-container">
-        <div class="testing-line">
-            <div class="tl-header ti-pgio">
-                Gpio Pin
-            </div>
-            <div class="tl-header ti-descr">
-                Beschreibung
-            </div>
-            <div class="tl-header ti-action">
-                Aktionen
-            </div>
+<div class="testing-waterlevel">
+    <div class="tw-status @(WaterLevelOk ? "tw-ok" : "tw-nok")">
+        Wasser Level
+    </div>
+</div>
+
+<h3>Energie, Ventil und Pumpe</h3>
+<div class="testing-container">
+    <div class="testing-line">
+        <div class="tl-header ti-pgio">
+            Gpio Pin
         </div>
-        <div class="testing-line">
-            <div class="tl-item ti-pgio">
-                @GpioSettings.PowerPin
-            </div>
-            <div class="tl-item ti-descr">
-                Power einschalten
-            </div>
-            <div class="tl-item ti-action">
-                <MatSlideToggle Value="PowerEnabled" TValue="bool" ValueChanged="@(async (e) => await PowerToggled(e))"></MatSlideToggle>
-            </div>
+        <div class="tl-header ti-descr">
+            Beschreibung
         </div>
-        <div class="testing-line">
-            <div class="tl-item ti-pgio">
-                @GpioSettings.ValvePin
-            </div>
-            <div class="tl-item ti-descr">
-                Ventil auf Pumpe schalten
-            </div>
-            <div class="tl-item ti-action">
-                <MatSlideToggle Value="ValveEnabled" TValue="bool" ValueChanged="@(async (e) => await ValveToggled(e))"></MatSlideToggle>
-            </div>
-        </div>
-        <div class="testing-line">
-            <div class="tl-item ti-pgio">
-                @GpioSettings.PumpPin
-            </div>
-            <div class="tl-item ti-descr">
-                Pumpe einschalten
-            </div>
-            <div class="tl-item ti-action">
-                <MatSlideToggle Value="PumpOn" TValue="bool" ValueChanged="@(async (e) => await PumpToggled(e))"></MatSlideToggle>
-            </div>
+        <div class="tl-header ti-action">
+            Aktionen
         </div>
     </div>
-    <div class="testing-container">
-        <div class="testing-line">
-            <div class="tl-header ti-pgio">
-                Gpio Pin
-            </div>
-            <div class="tl-header ti-descr">
-                Beschreibung
-            </div>
-            <div class="tl-header ti-action">
-                Aktionen
-            </div>
+    <div class="testing-line">
+        <div class="tl-item ti-pgio">
+            @GpioSettings.PowerPin
         </div>
-        <div class="testing-line">
-            <div class="tl-item ti-pgio">
-                @GpioSettings.WerferPin
-            </div>
-            <div class="tl-item ti-descr">
-                Werfer einschalten
-            </div>
-            <div class="tl-item ti-action">
-                <MatSlideToggle Value="WerferEnabled" TValue="bool" ValueChanged="@(async (e) => await WerferToggled(e))"></MatSlideToggle>
-            </div>
+        <div class="tl-item ti-descr">
+            Power einschalten
         </div>
-        <div class="testing-line">
-            <div class="tl-item ti-pgio">
-                @GpioSettings.SprueherPin
-            </div>
-            <div class="tl-item ti-descr">
-                Spüher einschalten
-            </div>
-            <div class="tl-item ti-action">
-                <MatSlideToggle Value="SprueherEnabled" TValue="bool" ValueChanged="@(async (e) => await SprueherToggled(e))"></MatSlideToggle>
-            </div>
-        </div>
-        <div class="testing-line">
-            <div class="tl-item ti-pgio">
-                @GpioSettings.TropferPin
-            </div>
-            <div class="tl-item ti-descr">
-                Tropfer einschalten
-            </div>
-            <div class="tl-item ti-action">
-                <MatSlideToggle Value="TropferEnabled" TValue="bool" ValueChanged="@(async (e) => await TropferToggled(e))"></MatSlideToggle>
-            </div>
+        <div class="tl-item ti-action">
+            <MatSlideToggle Value="PowerEnabled" TValue="bool" ValueChanged="@(async (e) => await PowerToggled(e))"></MatSlideToggle>
         </div>
     </div>
+    <div class="testing-line">
+        <div class="tl-item ti-pgio">
+            @GpioSettings.ValvePin
+        </div>
+        <div class="tl-item ti-descr">
+            Ventil auf Pumpe schalten
+        </div>
+        <div class="tl-item ti-action">
+            <MatSlideToggle Value="ValveEnabled" TValue="bool" ValueChanged="@(async (e) => await ValveToggled(e))"></MatSlideToggle>
+        </div>
+    </div>
+    <div class="testing-line">
+        <div class="tl-item ti-pgio">
+            @GpioSettings.PumpPin
+        </div>
+        <div class="tl-item ti-descr">
+            Pumpe einschalten
+        </div>
+        <div class="tl-item ti-action">
+            <MatSlideToggle Value="PumpOn" TValue="bool" ValueChanged="@(async (e) => await PumpToggled(e))"></MatSlideToggle>
+        </div>
+    </div>
+</div>
+
+<h3>Sprinkler</h3>
+<div class="testing-container">
+    <div class="testing-line">
+        <div class="tl-header ti-pgio">
+            Gpio Pin
+        </div>
+        <div class="tl-header ti-descr">
+            Beschreibung
+        </div>
+        <div class="tl-header ti-action">
+            Aktionen
+        </div>
+    </div>
+    <div class="testing-line">
+        <div class="tl-item ti-pgio">
+            @GpioSettings.WerferPin
+        </div>
+        <div class="tl-item ti-descr">
+            Werfer einschalten
+        </div>
+        <div class="tl-item ti-action">
+            <MatSlideToggle Value="WerferEnabled" TValue="bool" ValueChanged="@(async (e) => await WerferToggled(e))"></MatSlideToggle>
+        </div>
+    </div>
+    <div class="testing-line">
+        <div class="tl-item ti-pgio">
+            @GpioSettings.SprueherPin
+        </div>
+        <div class="tl-item ti-descr">
+            Spüher einschalten
+        </div>
+        <div class="tl-item ti-action">
+            <MatSlideToggle Value="SprueherEnabled" TValue="bool" ValueChanged="@(async (e) => await SprueherToggled(e))"></MatSlideToggle>
+        </div>
+    </div>
+    <div class="testing-line">
+        <div class="tl-item ti-pgio">
+            @GpioSettings.TropferPin
+        </div>
+        <div class="tl-item ti-descr">
+            Tropfer einschalten
+        </div>
+        <div class="tl-item ti-action">
+            <MatSlideToggle Value="TropferEnabled" TValue="bool" ValueChanged="@(async (e) => await TropferToggled(e))"></MatSlideToggle>
+        </div>
+    </div>
+</div>
+
+<h3>Sequenzen</h3>
+<div class="sprinklers-container">
+    @foreach (var sm in Sprinklers)
+    {
+        <SprinklerComponent Sprinkler="@sm" />
+    }
+</div>

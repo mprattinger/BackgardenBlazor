@@ -1,5 +1,14 @@
 ﻿<div class="sprinkler-container">
     <div class="spr-item spr-name">@Description</div>
-    <div class="spr-item spr-pin"></div>
-    <div class="spr-item spr-command"><MatSlideToggle Value="Enabled" TValue="bool" ValueChanged="@(async (e) => await ToggleChangedAsync(e))"></MatSlideToggle></div>
+    <div class="spr-item spr-command">
+        @if (IsSequenceRunning)
+        {
+            <Pulse />
+        }
+        else
+        {
+            <MatSlideToggle Value="Enabled" TValue="bool" ValueChanged="@(async (e) => await ToggleChangedAsync(e))"></MatSlideToggle>
+        }
+    </div>
+    <div class="spr-item spr-msg">@Message</div>
 </div>

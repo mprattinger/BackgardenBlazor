@@ -12,6 +12,9 @@ namespace BackgardenBlazor.Components
         [Inject]
         public AppState AppState { get; set; }
 
+        [Inject]
+        public SprinklerService SprinklerService { get; set; }
+
         [Parameter]
         public ToggleChangedModel Sprinkler { get; set; }
 
@@ -19,9 +22,14 @@ namespace BackgardenBlazor.Components
 
         public bool Enabled { get; set; }
 
+        public string Message { get; set; } = string.Empty;
+
+        public bool IsSequenceRunning { get; set; } = false;
+
         protected override void OnInitialized()
         {
-            AppState.OnGpioValueChangedAsync += appState_OnGpioValueChanged;
+            //AppState.OnGpioValueChangedAsync += appState_OnGpioValueChanged;
+            AppState.OnSprinklerMessage += appState_OnSprinklerMessage;
 
             switch (Sprinkler.ToggleType)
             {
@@ -54,6 +62,18 @@ namespace BackgardenBlazor.Components
             }
         }
 
+        private async Task appState_OnSprinklerMessage(ToggleType toogleType, string msg)
+        {
+            await InvokeAsync(() =>
+            {
+                if (toogleType == Sprinkler.ToggleType)
+                {
+                    Message = msg;
+                    StateHasChanged();
+                }
+            });
+        }
+
         private async Task appState_OnGpioValueChanged(ToggleChangedModel data)
         {
             await InvokeAsync(() =>
@@ -69,13 +89,21 @@ namespace BackgardenBlazor.Components
         public async Task ToggleChangedAsync(bool newValue)
         {
             Sprinkler.NewValue = newValue;
-            await AppState.ToggleGpioAsync(Sprinkler);
+            IsSequenceRunning = true;
+            StateHasChanged();
+            await SprinklerService.RunSprinklerSequence(Sprinkler);
+            Enabled = Sprinkler.NewValue;
+            IsSequenceRunning = false;
+            StateHasChanged();
+
+            //await AppState.ToggleGpioAsync(Sprinkler);
         }
 
         
         public void Dispose()
         {
-            AppState.OnGpioValueChangedAsync -= appState_OnGpioValueChanged;
+            //AppState.OnGpioValueChangedAsync -= appState_OnGpioValueChanged;
+            AppState.OnSprinklerMessage -= appState_OnSprinklerMessage;
         }
     }
 }

@@ -15,5 +15,9 @@
         public int SprueherPin { get; set; }
 
         public int TropferPin { get; set; }
+
+        public int ValveDelay { get; set; }
+
+        public int PumpDelay { get; set; }
     }
 }
