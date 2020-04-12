@@ -51,7 +51,6 @@ namespace BackgardenBlazor.Services
                     await _appState.GpioValueChangedAsync(
                         new ToggleChangedModel
                         {
-                            GpioPin = _gpioSettings.WaterLevelPin,
                             ToggleType = ToggleType.WATERLEVEL,
                             NewValue = val == PinValue.High ? true : false
                         });

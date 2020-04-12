@@ -14,18 +14,15 @@ namespace BackgardenBlazor.Pages
         [Inject]
         public AppState AppState { get; set; }
 
-        [Inject]
-        public GpioSettingsConfiguration GpioSettings { get; set; }
-
         public bool PumpEnabled { get; set; }
 
         public List<ToggleChangedModel> Sprinklers { get; set; } = new List<ToggleChangedModel>();
 
         protected override void OnInitialized()
         {
-            Sprinklers.Add(new ToggleChangedModel { GpioPin = GpioSettings.WerferPin, ToggleType = ToggleType.WERFER });
-            Sprinklers.Add(new ToggleChangedModel { GpioPin = GpioSettings.SprueherPin, ToggleType = ToggleType.SPRUEHER });
-            Sprinklers.Add(new ToggleChangedModel { GpioPin = GpioSettings.TropferPin, ToggleType = ToggleType.TROPFER });
+            Sprinklers.Add(new ToggleChangedModel { ToggleType = ToggleType.WERFER });
+            Sprinklers.Add(new ToggleChangedModel { ToggleType = ToggleType.SPRUEHER });
+            Sprinklers.Add(new ToggleChangedModel { ToggleType = ToggleType.TROPFER });
             AppState.OnGpioValueChangedAsync += appState_OnGpioValueChanged;
         }
 

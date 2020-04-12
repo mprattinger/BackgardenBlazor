@@ -21,7 +21,7 @@ namespace BackgardenBlazor.Models
     {
         public ToggleType ToggleType { get; set; } = ToggleType.UNKNOWN;
 
-        public int GpioPin { get; set; }
+        //public int GpioPin { get; set; }
 
         public bool NewValue { get; set; }
     }
