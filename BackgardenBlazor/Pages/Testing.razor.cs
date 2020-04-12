@@ -74,6 +74,7 @@ namespace BackgardenBlazor.Pages
                     default:
                         break;
                 }
+                StateHasChanged();
             });
         }
 
