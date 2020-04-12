@@ -31,6 +31,7 @@ namespace BackgardenBlazor.Pages
 
         protected override void OnInitialized()
         {
+            
             AppState.OnGpioValueChangedAsync += appState_OnGpioValueChangedAsync;
             AppState.OnGpioValueChanged += appState_OnGpioValueChanged;
         }
@@ -66,6 +67,9 @@ namespace BackgardenBlazor.Pages
                         break;
                     case ToggleType.VALVE:
                         ValveEnabled = arg.NewValue;
+                        break;
+                    case ToggleType.WATERLEVEL:
+                        WaterLevelOk = arg.NewValue;
                         break;
                     default:
                         break;

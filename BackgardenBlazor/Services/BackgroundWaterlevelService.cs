@@ -39,7 +39,7 @@ namespace BackgardenBlazor.Services
             return Task.CompletedTask;
         }
 
-        private void doWork(object state)
+        private async void doWork(object state)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace BackgardenBlazor.Services
                     var val = _gpioController.Read(_gpioSettings.WaterLevelPin);
                     _logger.LogDebug($"Waterlevel is: {val}");
 
-                    _appState.GpioValueChanged(
+                    await _appState.GpioValueChangedAsync(
                         new ToggleChangedModel
                         {
                             GpioPin = _gpioSettings.WaterLevelPin,
