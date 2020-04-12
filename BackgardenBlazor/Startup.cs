@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Device.Gpio;
-using System.Device.Gpio.Drivers;
 
 namespace BackgardenBlazor
 {
@@ -31,7 +30,7 @@ namespace BackgardenBlazor
             services.AddSingleton(gpioSettings);
 
 #if Linux
-            services.AddSingleton<GpioController>(x => new GpioController(PinNumberingScheme.Logical, new SysFsDriver()));
+            services.AddSingleton<GpioController>();
 #else
             services.AddSingleton<GpioController>(x => new GpioController(PinNumberingScheme.Logical, new GpioDriverMock()));
 #endif
