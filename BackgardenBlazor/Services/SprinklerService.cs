@@ -136,8 +136,8 @@ namespace BackgardenBlazor.Services
                     _gpioController.Write(_gpioSettings.PumpPin, PinValue.Low);
 #endif
                     await _appState.SprinklerMessageAsync(toggleChanged.ToggleType, "Pump off! Waiting...");
-                    await Task.Delay(Convert.ToInt32(TimeSpan.FromSeconds(Convert.ToDouble(_gpioSettings.PumpDelay)).TotalMilliseconds));
                     await notifyFrontend(ToggleType.PUMP, false);
+                    await Task.Delay(Convert.ToInt32(TimeSpan.FromSeconds(Convert.ToDouble(_gpioSettings.PumpDelay)).TotalMilliseconds));
                     await _appState.SprinklerMessageAsync(toggleChanged.ToggleType, "Pump off");
                     _logger.LogDebug("Pump is off! Setting valve to water pipe...");
 #if Linux
