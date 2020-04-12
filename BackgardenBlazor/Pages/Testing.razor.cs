@@ -90,22 +90,22 @@ namespace BackgardenBlazor.Pages
 
         public async Task WerferToggled(bool newValue)
         {
-            await AppState.ToggleGpioAsync(new ToggleChangedModel { GpioPin = GpioSettings.PumpPin, NewValue = newValue, ToggleType = ToggleType.PUMP });
+            await AppState.ToggleGpioAsync(new ToggleChangedModel { GpioPin = GpioSettings.WerferPin, NewValue = newValue, ToggleType = ToggleType.WERFER });
         }
 
         public async Task SprueherToggled(bool newValue)
         {
-            await AppState.ToggleGpioAsync(new ToggleChangedModel { GpioPin = GpioSettings.WerferPin, NewValue = newValue, ToggleType = ToggleType.WERFER });
+            await AppState.ToggleGpioAsync(new ToggleChangedModel { GpioPin = GpioSettings.SprueherPin, NewValue = newValue, ToggleType = ToggleType.SPRUEHER });
         }
 
         public async Task TropferToggled(bool newValue)
         {
-            await AppState.ToggleGpioAsync(new ToggleChangedModel { GpioPin = GpioSettings.SprueherPin, NewValue = newValue, ToggleType = ToggleType.SPRUEHER });
+            await AppState.ToggleGpioAsync(new ToggleChangedModel { GpioPin = GpioSettings.TropferPin, NewValue = newValue, ToggleType = ToggleType.TROPFER });
         }
 
         public async Task PumpToggled(bool newValue)
         {
-            await AppState.ToggleGpioAsync(new ToggleChangedModel { GpioPin = GpioSettings.TropferPin, NewValue = newValue, ToggleType = ToggleType.TROPFER });
+            await AppState.ToggleGpioAsync(new ToggleChangedModel { GpioPin = GpioSettings.PumpPin, NewValue = newValue, ToggleType = ToggleType.PUMP });
         }
 
         public void Dispose()
