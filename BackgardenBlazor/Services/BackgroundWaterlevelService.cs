@@ -43,16 +43,19 @@ namespace BackgardenBlazor.Services
         {
             try
             {
-                var val = _gpioController.Read(_gpioSettings.WaterLevelPin);
-                _logger.LogDebug($"Waterlevel is: {val}");
+                if (_gpioController.IsPinOpen(_gpioSettings.WaterLevelPin))
+                {
+                    var val = _gpioController.Read(_gpioSettings.WaterLevelPin);
+                    _logger.LogDebug($"Waterlevel is: {val}");
 
-                _appState.GpioValueChanged(
-                    new ToggleChangedModel
-                    {
-                        GpioPin = _gpioSettings.WaterLevelPin,
-                        ToggleType = ToggleType.WATERLEVEL,
-                        NewValue = val == PinValue.High ? true : false
-                    });
+                    _appState.GpioValueChanged(
+                        new ToggleChangedModel
+                        {
+                            GpioPin = _gpioSettings.WaterLevelPin,
+                            ToggleType = ToggleType.WATERLEVEL,
+                            NewValue = val == PinValue.High ? true : false
+                        });
+                }
             }
             catch (Exception ex)
             {
