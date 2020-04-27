@@ -99,6 +99,8 @@ namespace BackgardenBlazor.Services
 
 #if Linux
                         _gpioController.Write(pin, arg.NewValue ? PinValue.High : PinValue.Low);
+#else
+                _gpioController.Write(pin, arg.NewValue ? PinValue.High : PinValue.Low);
 #endif
                 await _appState.GpioValueChangedAsync(arg);
             });
@@ -127,6 +129,14 @@ namespace BackgardenBlazor.Services
                 default:
                     return -1;
             }
+        }
+
+        public bool GetGpioValue(ToggleType toggleType)
+        {
+            var pin = getGpioPin(_gpioSettings, toggleType);
+            var val = _gpioController.Read(pin);
+
+            return val == PinValue.High ? true : false;
         }
     }
 }

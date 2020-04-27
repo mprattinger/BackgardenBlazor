@@ -16,6 +16,9 @@ namespace BackgardenBlazor.Pages
         [Inject]
         public GpioSettingsConfiguration GpioSettings { get; set; }
 
+        [Inject]
+        public GpioService GpioService { get; set; }
+
         public bool PowerEnabled { get; set; }
 
         public bool ValveEnabled { get; set; }
@@ -38,6 +41,21 @@ namespace BackgardenBlazor.Pages
             Sprinklers.Add(new ToggleChangedModel { ToggleType = ToggleType.WERFER });
             Sprinklers.Add(new ToggleChangedModel { ToggleType = ToggleType.SPRUEHER });
             Sprinklers.Add(new ToggleChangedModel { ToggleType = ToggleType.TROPFER });
+        }
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                PowerEnabled = GpioService.GetGpioValue(ToggleType.POWER);
+                ValveEnabled = GpioService.GetGpioValue(ToggleType.VALVE);
+                PumpOn = GpioService.GetGpioValue(ToggleType.PUMP);
+                WaterLevelOk = GpioService.GetGpioValue(ToggleType.WATERLEVEL);
+                WerferEnabled = GpioService.GetGpioValue(ToggleType.WERFER);
+                SprueherEnabled = GpioService.GetGpioValue(ToggleType.SPRUEHER);
+                TropferEnabled = GpioService.GetGpioValue(ToggleType.TROPFER);
+                StateHasChanged();
+            }
         }
 
         private async Task appState_OnGpioValueChangedAsync(ToggleChangedModel arg)

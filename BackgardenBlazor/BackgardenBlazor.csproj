@@ -30,12 +30,20 @@
   <ItemGroup>
     <PackageReference Include="BlazorPro.Spinkit" Version="1.2.0" />
     <PackageReference Include="MatBlazor" Version="2.3.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
-    <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.3.0-dev-00152" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.1-dev-00224" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.4.1-dev-00071" />
     <PackageReference Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
-    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
-    <PackageReference Include="System.Device.Gpio" Version="1.0.0" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.1-dev-00771" />
+    <PackageReference Include="System.Device.Gpio" Version="1.1.0-prerelease.20153.1" />
+  </ItemGroup>
+
+  <Target Name="CreateLogsFolder" AfterTargets="Publish">
+    <Message Text="The name of the publish profile is $(PublishDir)" />
+  </Target>
+
+  <ItemGroup>
+    <None Include="wwwroot\*" />
   </ItemGroup>
 
 </Project>
